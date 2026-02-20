@@ -3136,18 +3136,11 @@ let
       '';
     });
 
-    iscream =
-      let
-        # https://huishenlab.github.io/iscream/articles/htslib.html
-        htslib-deflate = pkgs.htslib.overrideAttrs (attrs: {
-          buildInputs = attrs.buildInputs ++ [ pkgs.libdeflate ];
-        });
-      in
-      old.iscream.overrideAttrs (attrs: {
+    iscream = old.iscream.overrideAttrs (attrs: {
         # Rhtslib (in LinkingTo) is not needed if we provide a proper htslib
         propagatedBuildInputs =
           builtins.filter (el: el != pkgs.rPackages.Rhtslib) attrs.propagatedBuildInputs
-          ++ [ htslib-deflate ];
+          ++ [ pkgs.htslib ];
       });
 
     torch = old.torch.overrideAttrs (attrs: {
